@@ -29,3 +29,5 @@ Exception {
     public static void tearDownAfterClass() throws Exception {
     }
 }
+
+//Testing if git is working properly
