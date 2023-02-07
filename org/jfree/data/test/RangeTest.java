@@ -78,10 +78,4 @@ public class RangeTest {
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
     }
-<<<<<<< Updated upstream
 }
-
-//Testing if git is working properly aaaa
-=======
-}
->>>>>>> Stashed changes
