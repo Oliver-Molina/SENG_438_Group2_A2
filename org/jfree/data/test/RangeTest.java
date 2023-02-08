@@ -112,16 +112,26 @@ public class RangeTest {
     // Testing method Range expandToInclude(Range range, double value)
     @Test
     public void ExpandIncludeUpper() throws Exception {
-    	Range testRange = Range.expandToInclude(range1, 5);
+    	Range range0 = new Range(-1, 1);
+    	Range testRange = Range.expandToInclude(range0, 5);
     	Range expectedRange = new Range(-1, 5);
     	assertTrue("The range was not expanded.", testRange.equals(expectedRange));
     }
     
     @Test
     public void ExpandIncludeLower() throws Exception {
-    	Range testRange = Range.expandToInclude(range1, -5);
+    	Range range0 = new Range(-1, 1);
+    	Range testRange = Range.expandToInclude(range0, -5);
     	Range expectedRange = new Range(-5, 1);
     	assertTrue("The range was not expanded.", testRange.equals(expectedRange));
+    }
+    
+    @Test 
+    public void StringIsMade() throws Exception {
+    	Range testRange = new Range(-10.0,10.0);
+    	String expected = "Range[-10.0,10.0]";
+    	String actual = testRange.toString();
+    	assertTrue("The correct string was not made.\nExpected: 'Range[-10.0,10.0]'\nActual: "+actual, actual.equals(expected));
     }
 
 
