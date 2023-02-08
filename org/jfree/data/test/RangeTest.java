@@ -164,15 +164,6 @@ public class RangeTest {
         		0, range.getLength(), .000000001d);
     }
     
-    //toString
-    @Test 
-    public void StringIsMade() throws Exception {
-    	Range testRange = new Range(-10.0,10.0);
-    	String expected = "Range[-10.0,10.0]";
-    	String actual = testRange.toString();
-    	assertTrue("The correct string was not made.\nExpected: 'Range[-10.0,10.0]'\nActual: "+actual, actual.equals(expected));
-    }
-    
     //hashCode
     @Test
     public void SameObjectHashCode() throws Exception {
@@ -199,6 +190,47 @@ public class RangeTest {
     	int hash2 = range2.hashCode();
     	assertTrue("Hash codes were not equal: "+hash1+" == "+hash2, hash1 != hash2);
     }
+    
+    //intersects
+    @Test
+    public void RangeIntersectsUpperBound() throws Exception {
+    	Range range = new Range(-1, 2);
+    	assertTrue("Intersection should be true", range.intersects(1,  3));
+    }
+    
+    @Test
+    public void RangeIntersectsLowerBound() throws Exception {
+    	Range range = new Range(-1, 2);
+    	assertTrue("Intersection should be true", range.intersects(-3,  1));
+    }
+    
+    @Test
+    public void RangeDoesntIntersect() throws Exception {
+    	Range range = new Range(-1, 1);
+    	assertFalse("Intersection should be false", range.intersects(3,  5));
+    }
+    
+    @Test
+    public void RangeIntersectsSubsection() throws Exception {
+    	Range range = new Range(0, 10);
+    	assertTrue("Intersection should be true", range.intersects(2,  5));
+    }
+    
+    @Test
+    public void RangeIsSubsection() throws Exception {
+    	Range range = new Range(2, 5);
+    	assertTrue("Intersection should be true", range.intersects(0,  10));
+    }
+    
+    //toString
+    @Test 
+    public void TestToString() throws Exception {
+    	Range testRange = new Range(-10.0,10.0);
+    	String expected = "Range[-10.0,10.0]";
+    	String actual = testRange.toString();
+    	assertTrue("The correct string was not made.\nExpected: 'Range[-10.0,10.0]'\nActual: "+actual, actual.equals(expected));
+    }
+
 
     @After
     public void tearDown() throws Exception {
