@@ -81,19 +81,22 @@ public class RangeTest {
     
     // Testing method expand(Range range, double lowerMargin, double upperMargin)
     @Test
-    public void ExpandsLowerBound() throws Exception {
+    public void ExpandsPercetanges() throws Exception {
     	Range testRange = new Range(2, 6);
     	Range newRange = Range.expand(testRange, 0.25, 0.5);
-    	assertEquals("The range did not properly expand the lower bound.", 1, newRange.getLowerBound(), .000000001d);
+    	Range expectedRange = new Range(1,8);
+//    	assertEquals("The range did not properly expand the lower bound.", 1, newRange.getLowerBound(), .000000001d);
+    	assertTrue("The range did not properly expand the lower bound.", newRange.equals(expectedRange));
     }
     // note: getupperbound returns the lower bound lol
-    @Test
-    public void ExpandsUpperBound() throws Exception {
-    	Range testRange = new Range(2, 6);
-    	Range newRange = Range.expand(testRange, 0.25, 0.5);
-    	assertEquals("The range did not properly expand the upper bound", 8, newRange.getUpperBound(), .000000001d);
-    }
-    
+//    @Test
+//    public void ExpandsUpperBound() throws Exception {
+//    	Range testRange = new Range(2, 6);
+//    	Range newRange = Range.expand(testRange, 0.25, 0.5);
+////    	assertEquals("The range did not properly expand the upper bound", 8, newRange.getUpperBound(), .000000001d);
+//    	assertTrue("The range did not properly expand the lower bound.", newRange.equals(testRange));
+//    }
+//    
     @Test
     public void ExpandThrowsException() throws Exception {
     	Range nullRange = null;
