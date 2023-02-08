@@ -1,6 +1,7 @@
 package org.jfree.data.test;
 
 import static org.junit.Assert.*;
+
 import org.jfree.data.Range;
 import org.junit.*;
 
@@ -68,8 +69,58 @@ public class RangeTest {
     
     @Test 
     public void ContainsReturnsFalse() throws Exception {
-    	assertFalse("Contains should return false for argument -5 pn range3", range3.contains(-5));
+    	assertFalse("Contains should return false for argument -5 on range3", range3.contains(-5));
     }
+    
+    // Testing method equals(Object obj)
+    @Test
+    public void EqualsSameRange() throws Exception {
+    	Range testRange = new Range(-1, 1);
+    	assertTrue("The equals method should be returning true on equivalent ranges.", range1.equals(testRange));
+    }
+    
+    // Testing method expand(Range range, double lowerMargin, double upperMargin)
+    @Test
+    public void ExpandsLowerBound() throws Exception {
+    	Range testRange = new Range(2, 6);
+    	Range newRange = Range.expand(testRange, 0.25, 0.5);
+    	assertEquals("The range did not properly expand the lower bound.", 1, newRange.getLowerBound(), .000000001d);
+    }
+    // note: getupperbound returns the lower bound lol
+    @Test
+    public void ExpandsUpperBound() throws Exception {
+    	Range testRange = new Range(2, 6);
+    	Range newRange = Range.expand(testRange, 0.25, 0.5);
+    	assertEquals("The range did not properly expand the upper bound", 8, newRange.getUpperBound(), .000000001d);
+    }
+    
+    @Test
+    public void ExpandThrowsException() throws Exception {
+    	Range nullRange = null;
+    	boolean threwException = false;
+    	try {
+    		Range.expand(nullRange, 2, 6);
+    	}catch(IllegalArgumentException e){
+    		threwException = true;
+    	}
+    	assertTrue("Expand method did not correctly throw an exception upon receiving a null range object", threwException);
+    }
+    
+    // Testing method Range expandToInclude(Range range, double value)
+    @Test
+    public void ExpandIncludeUpper() throws Exception {
+    	Range testRange = Range.expandToInclude(range1, 5);
+    	Range expectedRange = new Range(-1, 5);
+    	assertTrue("The range was not expanded.", testRange.equals(expectedRange));
+    }
+    
+    @Test
+    public void ExpandIncludeLower() throws Exception {
+    	Range testRange = Range.expandToInclude(range1, -5);
+    	Range expectedRange = new Range(-5, 1);
+    	assertTrue("The range was not expanded.", testRange.equals(expectedRange));
+    }
+
 
     @After
     public void tearDown() throws Exception {
