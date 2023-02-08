@@ -143,6 +143,12 @@ public class RangeTest {
     }
     
     //getLength
+    @Test
+    public void getLengthDecimalValues() {
+		Range range = new Range(10.1, 22.89);
+        assertEquals("Length should be 12.79",
+        		12.79, range.getLength(), .000000001d);
+    }
     
     @Test
     public void getLengthNegativeLowerBound() {
@@ -165,6 +171,33 @@ public class RangeTest {
     	String expected = "Range[-10.0,10.0]";
     	String actual = testRange.toString();
     	assertTrue("The correct string was not made.\nExpected: 'Range[-10.0,10.0]'\nActual: "+actual, actual.equals(expected));
+    }
+    
+    //hashCode
+    @Test
+    public void SameObjectHashCode() throws Exception {
+    	Range range = new Range(-1, 1);
+    	int hash1 = range.hashCode();
+    	int hash2 = range.hashCode();
+    	assertTrue("Hash codes were not equal: "+hash1+" != "+hash2, hash1 == hash2);
+    }
+    
+    @Test
+    public void SimilarObjectHashCode() throws Exception {
+    	Range range1 = new Range(-1, 1);
+    	Range range2 = new Range(-1, 1);
+    	int hash1 = range1.hashCode();
+    	int hash2 = range2.hashCode();
+    	assertTrue("Hash codes were not equal: "+hash1+" != "+hash2, hash1 == hash2);
+    }
+    
+    @Test
+    public void DifferentObjectHashCode() throws Exception {
+    	Range range1 = new Range(-1, 1);
+    	Range range2 = new Range(-1, 2);
+    	int hash1 = range1.hashCode();
+    	int hash2 = range2.hashCode();
+    	assertTrue("Hash codes were not equal: "+hash1+" == "+hash2, hash1 != hash2);
     }
 
     @After
