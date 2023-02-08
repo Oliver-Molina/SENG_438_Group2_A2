@@ -19,14 +19,9 @@ public class RangeTest {
 		range2 = new Range(-10,0);
 		range3 = new Range(1,10);
 	}	
-	
+
+	 
 	// Testing method combine(Range range1, Range range2)
-    @Test
-    public void centralValueShouldBeZero() {
-        assertEquals("The central value of -1 and 1 should be 0",
-        0, range1.getCentralValue(), .000000001d);
-    }
-    
     @Test
     public void CombinedRangeShouldBeRange1() throws Exception{
     	assertEquals("The combined range should be -1,1",range1,Range.combine(range1,null));
@@ -123,7 +118,43 @@ public class RangeTest {
     	Range expectedRange = new Range(-5, 1);
     	assertTrue("The range was not expanded.", testRange.equals(expectedRange));
     }
+    
+    // Testing getCentralValue
+    @Test
+    public void centralValueShouldBeZero() {
+        assertEquals("The central value of -1 and 1 should be 0",
+        0, range1.getCentralValue(), .000000001d);
+    }
 
+    @Test
+    public void centralValueDouble() {
+		Range range = new Range(-0.33, 8.25);
+        assertEquals("Central value should be 3.96",
+        		3.96, range.getCentralValue(), .000000001d);
+    }
+    
+    @Test
+    public void centralValueSameBounds() {
+		Range range = new Range(1, 1);
+        assertEquals("Central value should be 1",
+        		1, range.getCentralValue(), .000000001d);
+    }
+    
+    //getLength
+    
+    @Test
+    public void getLengthNegativeLowerBound() {
+		Range range = new Range(-12.5,10);
+        assertEquals("Length should be 22.5",
+        		22.5, range.getLength(), .000000001d);
+    }
+    
+    @Test
+    public void getLengthZero() {
+		Range range = new Range(1,1);
+        assertEquals("Length should be 0",
+        		0, range.getLength(), .000000001d);
+    }
 
     @After
     public void tearDown() throws Exception {
