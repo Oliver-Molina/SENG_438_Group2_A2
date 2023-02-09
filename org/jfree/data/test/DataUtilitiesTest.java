@@ -33,31 +33,30 @@ public class DataUtilitiesTest extends DataUtilities {
 	}
 	
 	// Testing method calculateColumnTotal(Values2D data, int column)
+	
 	@Test
 	public void calculateColumnTotalForTwoValues() {
 		double result = DataUtilities.calculateColumnTotal(values,0);
 		assertEquals("CalculateColumnTotal should return 10 but instead returned" + result, result, 10.0, .000000001d);
 	}
 	
-	// Testing method calculateRowTotal(Values2D data, int row)
-	public void () throws Exception{
-		
+	@Test (expected = NullPointerException.class)
+	public void calculateColumnTotalForInavlidColumn() {
+		double result = DataUtilities.calculateColumnTotal(values,0);
 	}
+	
+	@Test (expected = NullPointerException.class)
+	public void calculateColumnTotalForNullTable() throws Exception{
+		double result = DataUtilities.calculateColumnTotal(null,0);
+	}
+	
+	// Testing method calculateRowTotal(Values2D data, int row)
 	
 	// Testing method createNumberArray(double[] data)
-	public void () throws Exception{
-		
-	}
 	
 	// Testing method createNumberArray2D(double[][] data)
-	public void () throws Exception{
-		
-	}
 	
 	// Testing method getCumulativePercentages(KeyedValues data)
-	public void () throws Exception{
-		
-	}
 
 	@After
 	public void tearDown() throws Exception {
