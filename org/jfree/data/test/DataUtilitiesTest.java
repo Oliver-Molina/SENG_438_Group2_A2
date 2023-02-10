@@ -2,15 +2,19 @@ package org.jfree.data.test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.jfree.data.DataUtilities;
+import org.jfree.data.KeyedValues;
 import org.jfree.data.Values2D;
 import org.jmock.*;
 import org.junit.*;
 
 public class DataUtilitiesTest extends DataUtilities {
-//	Mockery mockingContext;
-//	Values2D values;
+	Mockery mockingContext;
+	Values2D values;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -18,8 +22,8 @@ public class DataUtilitiesTest extends DataUtilities {
 
 	@Before
 	public void setUp() throws Exception {
-		// im pretty sure we have to add a setup in each method test
-		// - danny
+		mockingContext  = new Mockery();
+		values = mockingContext.mock(Values2D.class);
 	}
 	
 	
@@ -28,8 +32,6 @@ public class DataUtilitiesTest extends DataUtilities {
 	@Test
 	public void calculateColumnTotalForTwoValues() {
 		// setup
-		Mockery mockingContext  = new Mockery();
-		Values2D values = mockingContext.mock(Values2D.class);
 		mockingContext.checking(new Expectations() {
 		    {
 		         one(values).getRowCount();
@@ -48,8 +50,6 @@ public class DataUtilitiesTest extends DataUtilities {
 	@Test //(expected = NullPointerException.class) // it says that invalid input returns 0
 	public void calculateColumnTotalForInavlidColumn() {
 		// setup
-		Mockery mockingContext  = new Mockery();
-		Values2D values = mockingContext.mock(Values2D.class);
 		mockingContext.checking(new Expectations() {
 		    {
 		         one(values).getRowCount();
@@ -74,8 +74,6 @@ public class DataUtilitiesTest extends DataUtilities {
 	@Test
 	public void calculateRowTotalForTwoValues() {
 		// setup
-		Mockery mockingContext  = new Mockery();
-		Values2D values = mockingContext.mock(Values2D.class);
 		mockingContext.checking(new Expectations() {
 		    {
 		         one(values).getColumnCount();
@@ -92,10 +90,8 @@ public class DataUtilitiesTest extends DataUtilities {
 	}
 	
 	@Test (expected = NullPointerException.class)
-	public void calculateRowTotalForInavlidRow() {
+	public void calculateRowTotalForInvalidRow() {
 		// setup
-		Mockery mockingContext  = new Mockery();
-		Values2D values = mockingContext.mock(Values2D.class);
 		mockingContext.checking(new Expectations() {
 		    {
 		    	one(values).getColumnCount();
@@ -122,7 +118,248 @@ public class DataUtilitiesTest extends DataUtilities {
 	
 	
 	// Testing method getCumulativePercentages(KeyedValues data)
-
+	// NOTE: key != index as stated by documentation - 2 separate things!
+	// getValue uses a key, getKey uses an index
+	@Test
+	public void ZeroKey_GetCumulativePercentages() {
+		Mockery mocking  = new Mockery();
+		KeyedValues kvValues = mocking.mock(KeyedValues.class);
+		
+		//our list of 3 keys
+		List<Integer> keys = new ArrayList<Integer>();
+		for(int i = 0; i < 3; i++) keys.add(i);
+		
+		//set up mocking
+		mocking.checking(new Expectations() {
+		    {
+		    	//i had to go digging through jmock documentation for this one :(
+		    	//item count = 3
+		    	allowing(kvValues).getItemCount();
+		    	will(returnValue(3));
+		    	//keys = 0, 1, 2
+		    	allowing(kvValues).getKey(0);
+		    	will(returnValue(0));
+		    	allowing(kvValues).getKey(1);
+		    	will(returnValue(1));
+		    	allowing(kvValues).getKey(2);
+		    	will(returnValue(2));
+		    	//values = 5, 9, 2
+		    	allowing(kvValues).getValue(0);
+		    	will(returnValue(5));
+		    	allowing(kvValues).getValue(1);
+		    	will(returnValue(9));
+		    	allowing(kvValues).getValue(2);
+		    	will(returnValue(2));
+		    }
+		});
+		
+		// test
+		KeyedValues func = DataUtilities.getCumulativePercentages(kvValues);
+		double[] results = {
+				func.getValue(0).doubleValue(),
+				func.getValue(1).doubleValue(),
+				func.getValue(2).doubleValue()
+		};
+		double[] expected = {0.3125, 0.875, 1.0};
+		
+		assertTrue("results should equal expected.\nresults: "+Arrays.toString(results)+"\nexpected: "+Arrays.toString(expected), expected.equals(results));
+	}
+	
+	@Test
+	public void StringKeys_GetCumulativePercentages() {
+		Mockery mocking  = new Mockery();
+		KeyedValues kvValues = mocking.mock(KeyedValues.class);
+		
+		//our list of 3 keys
+		List<Integer> keys = new ArrayList<Integer>();
+		for(int i = 0; i < 3; i++) keys.add(i);
+		
+		//set up mocking
+		mocking.checking(new Expectations() {
+		    {
+		    	//i had to go digging through jmock documentation for this one :(
+		    	//item count = 3
+		    	allowing(kvValues).getItemCount();
+		    	will(returnValue(3));
+		    	//keys = 0, 1, 2
+		    	allowing(kvValues).getKey(0);
+		    	will(returnValue("key1"));
+		    	allowing(kvValues).getKey(1);
+		    	will(returnValue("key2"));
+		    	allowing(kvValues).getKey(2);
+		    	will(returnValue("key3"));
+		    	//values = 5, 9, 2
+		    	allowing(kvValues).getValue("key1");
+		    	will(returnValue(5));
+		    	allowing(kvValues).getValue("key2");
+		    	will(returnValue(9));
+		    	allowing(kvValues).getValue("key3");
+		    	will(returnValue(2));
+		    	//code doesnt properly check for keys lol
+		    	allowing(kvValues).getValue(0);
+		    	will(returnValue(null));
+		    	allowing(kvValues).getValue(1);
+		    	will(returnValue(null));
+		    	allowing(kvValues).getValue(2);
+		    	will(returnValue(null));
+		    	
+		    }
+		});
+		
+		// test
+		KeyedValues func = DataUtilities.getCumulativePercentages(kvValues);
+		double[] results = {
+				func.getValue(0).doubleValue(),
+				func.getValue(1).doubleValue(),
+				func.getValue(2).doubleValue()
+		};
+		double[] expected = {0.3125, 0.875, 1.0};
+		
+		assertTrue("results should equal expected.\nresults: "+Arrays.toString(results)+"\nexpected: "+Arrays.toString(expected), expected.equals(results));
+	}
+	
+	@Test
+	public void NoZeroKey_GetCumulativePercentages() {
+		Mockery mocking  = new Mockery();
+		KeyedValues kvValues = mocking.mock(KeyedValues.class);
+		
+		//our list of 3 keys
+		List<Integer> keys = new ArrayList<Integer>();
+		for(int i = 0; i < 3; i++) keys.add(i);
+		
+		//set up mocking
+		mocking.checking(new Expectations() {
+		    {
+		    	//i had to go digging through jmock documentation for this one :(
+		    	//item count = 3
+		    	allowing(kvValues).getItemCount();
+		    	will(returnValue(2));
+		    	//keys = 0, 1, 2
+		    	allowing(kvValues).getKey(0);
+		    	will(returnValue(-4));
+		    	allowing(kvValues).getKey(1);
+		    	will(returnValue(128));
+		    	//values = 5, 9, 2
+		    	allowing(kvValues).getValue(-4);
+		    	will(returnValue(5));
+		    	allowing(kvValues).getValue(128);
+		    	will(returnValue(9));
+		    	//code doesnt properly check for keys lol
+		    	allowing(kvValues).getValue(0);
+		    	will(returnValue(null));
+		    	allowing(kvValues).getValue(1);
+		    	will(returnValue(null));
+		    	
+		    }
+		});
+		
+		// test
+		KeyedValues func = DataUtilities.getCumulativePercentages(kvValues);
+		double[] results = {
+				func.getValue(0).doubleValue(),
+				func.getValue(1).doubleValue(),
+		};
+		double[] expected = {5/14, 1.0};
+		
+		assertTrue("results should equal expected.\nresults: "+Arrays.toString(results)+"\nexpected: "+Arrays.toString(expected), expected.equals(results));
+	}
+	
+	@Test
+	public void SizeFive_GetCumulativePercentages() {
+		Mockery mocking  = new Mockery();
+		KeyedValues kvValues = mocking.mock(KeyedValues.class);
+		
+		//our list of 3 keys
+		List<Integer> keys = new ArrayList<Integer>();
+		for(int i = 0; i < 3; i++) keys.add(i);
+		
+		//set up mocking
+		mocking.checking(new Expectations() {
+		    {
+		    	//i had to go digging through jmock documentation for this one :(
+		    	//item count = 3
+		    	allowing(kvValues).getItemCount();
+		    	will(returnValue(5));
+		    	//keys = 0, 1, 2
+		    	allowing(kvValues).getKey(0);
+		    	will(returnValue(1));
+		    	allowing(kvValues).getKey(1);
+		    	will(returnValue(2));
+		    	allowing(kvValues).getKey(2);
+		    	will(returnValue(3));
+		    	allowing(kvValues).getKey(3);
+		    	will(returnValue(4));
+		    	allowing(kvValues).getKey(4);
+		    	will(returnValue(5));
+		    	//values = 5, 9, 2
+		    	allowing(kvValues).getValue(1);
+		    	will(returnValue(5));
+		    	allowing(kvValues).getValue(2);
+		    	will(returnValue(9));
+		    	allowing(kvValues).getValue(3);
+		    	will(returnValue(2));
+		    	allowing(kvValues).getValue(4);
+		    	will(returnValue(0));
+		    	allowing(kvValues).getValue(5);
+		    	will(returnValue(0));
+		    	allowing(kvValues).getValue(0);
+		    	will(returnValue(null));
+		    }
+		});
+		
+		// test
+		KeyedValues func = DataUtilities.getCumulativePercentages(kvValues);
+		double[] results = {
+				func.getValue(1).doubleValue(),
+				func.getValue(2).doubleValue(),
+				func.getValue(3).doubleValue(),
+				func.getValue(4).doubleValue(),
+				func.getValue(5).doubleValue()
+		};
+		double[] expected = {0.3125, 0.875, 1.0, 1.0, 1.0};
+		
+		assertTrue("results should equal expected.\nresults: "+Arrays.toString(results)+"\nexpected: "+Arrays.toString(expected), expected.equals(results));
+	}
+	
+	@Test
+	public void SimpleZeroKey_GetCumulativePercentages() {
+		Mockery mocking  = new Mockery();
+		KeyedValues kvValues = mocking.mock(KeyedValues.class);
+		
+		//our list of 3 keys
+		List<Integer> keys = new ArrayList<Integer>();
+		for(int i = 0; i < 3; i++) keys.add(i);
+		
+		//set up mocking
+		mocking.checking(new Expectations() {
+		    {
+		    	//i had to go digging through jmock documentation for this one :(
+		    	//item count = 2
+		    	allowing(kvValues).getItemCount();
+		    	will(returnValue(2));
+		    	//keys = 0, 1
+		    	allowing(kvValues).getKey(0);
+		    	will(returnValue(0));
+		    	allowing(kvValues).getKey(1);
+		    	will(returnValue(1));
+		    	//values = 5, 5
+		    	allowing(kvValues).getValue(0);
+		    	will(returnValue(5));
+		    	allowing(kvValues).getValue(1);
+		    	will(returnValue(5));
+		    }
+		});
+		
+		// test
+		KeyedValues func = DataUtilities.getCumulativePercentages(kvValues);
+		double[] results = {
+				func.getValue(1).doubleValue(),
+				func.getValue(2).doubleValue(),
+		};
+		double[] expected = {0.5, 1.0};
+		
+		assertTrue("results should equal expected.\nresults: "+Arrays.toString(results)+"\nexpected: "+Arrays.toString(expected), expected.equals(results));
+	}
 	
 	@After
 	public void tearDown() throws Exception {
