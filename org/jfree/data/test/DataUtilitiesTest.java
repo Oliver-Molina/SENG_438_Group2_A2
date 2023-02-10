@@ -361,6 +361,27 @@ public class DataUtilitiesTest extends DataUtilities {
 		assertTrue("results should equal expected.\nresults: "+Arrays.toString(results)+"\nexpected: "+Arrays.toString(expected), expected.equals(results));
 	}
 	
+	@Test
+	public void createNumberArray() 
+	{
+		double[] val = new double [] {69.0, 69.0, 69.0, 69.0};
+		
+		Number [] actual = DataUtilities.createNumberArray(val);
+		boolean res = actual.equals(val);
+		assertTrue(res);
+	}
+
+	@Test
+	public void createNumberArray2D()
+	{
+		double[][] val = new double [][] {{42.0, 42.0}, {42.0, 42.0}};
+
+		Number [][] actual = DataUtilities.createNumberArray2D(val);
+		boolean res = actual.equals(val);
+		assertTrue(res);
+	}
+	
+	
 	@After
 	public void tearDown() throws Exception {
 	}
