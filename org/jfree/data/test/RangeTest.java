@@ -74,14 +74,12 @@ public class RangeTest {
     	assertTrue("The equals method should be returning true on equivalent ranges.", range1.equals(testRange));
     }
     
-    // Testing method equals(Object obj)
     @Test
     public void NotEqualsRange() throws Exception {
     	Range range = new Range(-1, 2);
-    	assertFalse("The equals method should be returning false on equivalent ranges.", range.equals(range1));
+    	assertFalse("The equals method should be returning false on nonequivalent ranges.", range.equals(range1));
     }
     
-    // Testing method equals(Object obj)
     @Test
     public void EqualsSimilarRange() throws Exception {
     	Range range1Similar = new Range(-1, 1);
