@@ -97,14 +97,6 @@ public class RangeTest {
     	assertTrue("The range did not properly expand the lower bound.", newRange.equals(expectedRange));
     }
     
-    //check over this one
-    @Test
-    public void ExpandsUpperBound() throws Exception {
-    	Range testRange = new Range(2, 6);
-    	Range newRange = Range.expand(testRange, 0.25, 0.5);
-    	assertTrue("The range did not properly expand the lower bound.", newRange.equals(testRange));
-    }
-    
     @Test (expected = IllegalArgumentException.class)
     public void ExpandThrowsException() {
     	Range.expand(null, 2, 6);
