@@ -74,6 +74,20 @@ public class RangeTest {
     	assertTrue("The equals method should be returning true on equivalent ranges.", range1.equals(testRange));
     }
     
+    // Testing method equals(Object obj)
+    @Test
+    public void NotEqualsRange() throws Exception {
+    	Range range = new Range(-1, 2);
+    	assertFalse("The equals method should be returning false on equivalent ranges.", range.equals(range1));
+    }
+    
+    // Testing method equals(Object obj)
+    @Test
+    public void EqualsSimilarRange() throws Exception {
+    	Range range1Similar = new Range(-1, 1);
+    	assertTrue("The equals method should be returning false on equivalent ranges.", range1.equals(range1Similar));
+    }
+    
     // Testing method expand(Range range, double lowerMargin, double upperMargin)
     @Test
     public void ExpandsPercetanges() throws Exception {
@@ -83,6 +97,7 @@ public class RangeTest {
     	assertTrue("The range did not properly expand the lower bound.", newRange.equals(expectedRange));
     }
     
+    //check over this one
     @Test
     public void ExpandsUpperBound() throws Exception {
     	Range testRange = new Range(2, 6);
