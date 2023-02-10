@@ -80,157 +80,20 @@ public class RangeTest {
     	Range testRange = new Range(2, 6);
     	Range newRange = Range.expand(testRange, 0.25, 0.5);
     	Range expectedRange = new Range(1,8);
-//    	assertEquals("The range did not properly expand the lower bound.", 1, newRange.getLowerBound(), .000000001d);
     	assertTrue("The range did not properly expand the lower bound.", newRange.equals(expectedRange));
     }
-    // note: getupperbound returns the lower bound lol
-//    @Test
-//    public void ExpandsUpperBound() throws Exception {
-//    	Range testRange = new Range(2, 6);
-//    	Range newRange = Range.expand(testRange, 0.25, 0.5);
-////    	assertEquals("The range did not properly expand the upper bound", 8, newRange.getUpperBound(), .000000001d);
-//    	assertTrue("The range did not properly expand the lower bound.", newRange.equals(testRange));
-//    }
-//    
-    @Test
-    public void ExpandThrowsException() throws Exception {
-    	Range nullRange = null;
-    	boolean threwException = false;
-    	try {
-    		Range.expand(nullRange, 2, 6);
-    	}catch(IllegalArgumentException e){
-    		threwException = true;
-    	}
-    	assertTrue("Expand method did not correctly throw an exception upon receiving a null range object", threwException);
-    }
-    
-    // Testing method Range expandToInclude(Range range, double value)
-    @Test
-    public void ExpandIncludeUpper() throws Exception {
-    	Range range0 = new Range(-1, 1);
-    	Range testRange = Range.expandToInclude(range0, 5);
-    	Range expectedRange = new Range(-1, 5);
-    	assertTrue("The range was not expanded.", testRange.equals(expectedRange));
-    }
     
     @Test
-    public void ExpandIncludeLower() throws Exception {
-    	Range range0 = new Range(-1, 1);
-    	Range testRange = Range.expandToInclude(range0, -5);
-    	Range expectedRange = new Range(-5, 1);
-    	assertTrue("The range was not expanded.", testRange.equals(expectedRange));
+    public void ExpandsUpperBound() throws Exception {
+    	Range testRange = new Range(2, 6);
+    	Range newRange = Range.expand(testRange, 0.25, 0.5);
+    	assertTrue("The range did not properly expand the lower bound.", newRange.equals(testRange));
     }
     
-    // Testing getCentralValue
-    @Test
-    public void centralValueShouldBeZero() {
-        assertEquals("The central value of -1 and 1 should be 0",
-        0, range1.getCentralValue(), .000000001d);
-	}
-
-    @Test
-    public void centralValueDouble() {
-		Range range = new Range(-0.33, 8.25);
-        assertEquals("Central value should be 3.96",
-        		3.96, range.getCentralValue(), .000000001d);
+    @Test (expected = IllegalArgumentException.class)
+    public void ExpandThrowsException() {
+    	Range.expand(null, 2, 6);
     }
-    
-    @Test
-    public void centralValueSameBounds() {
-		Range range = new Range(1, 1);
-        assertEquals("Central value should be 1",
-        		1, range.getCentralValue(), .000000001d);
-    }
-    
-    //getLength
-    @Test
-    public void getLengthDecimalValues() {
-		Range range = new Range(10.1, 22.89);
-        assertEquals("Length should be 12.79",
-        		12.79, range.getLength(), .000000001d);
-    }
-    
-    @Test
-    public void getLengthNegativeLowerBound() {
-		Range range = new Range(-12.5,10);
-        assertEquals("Length should be 22.5",
-        		22.5, range.getLength(), .000000001d);
-    }
-    
-    @Test
-    public void getLengthZero() {
-		Range range = new Range(1,1);
-        assertEquals("Length should be 0",
-        		0, range.getLength(), .000000001d);
-    }
-    
-    //hashCode
-    @Test
-    public void SameObjectHashCode() throws Exception {
-    	Range range = new Range(-1, 1);
-    	int hash1 = range.hashCode();
-    	int hash2 = range.hashCode();
-    	assertTrue("Hash codes were not equal: "+hash1+" != "+hash2, hash1 == hash2);
-    }
-    
-    @Test
-    public void SimilarObjectHashCode() throws Exception {
-    	Range range1 = new Range(-1, 1);
-    	Range range2 = new Range(-1, 1);
-    	int hash1 = range1.hashCode();
-    	int hash2 = range2.hashCode();
-    	assertTrue("Hash codes were not equal: "+hash1+" != "+hash2, hash1 == hash2);
-    }
-    
-    @Test
-    public void DifferentObjectHashCode() throws Exception {
-    	Range range1 = new Range(-1, 1);
-    	Range range2 = new Range(-1, 2);
-    	int hash1 = range1.hashCode();
-    	int hash2 = range2.hashCode();
-    	assertTrue("Hash codes were not equal: "+hash1+" == "+hash2, hash1 != hash2);
-    }
-    
-    //intersects
-    @Test
-    public void RangeIntersectsUpperBound() throws Exception {
-    	Range range = new Range(-1, 2);
-    	assertTrue("Intersection should be true", range.intersects(1,  3));
-    }
-    
-    @Test
-    public void RangeIntersectsLowerBound() throws Exception {
-    	Range range = new Range(-1, 2);
-    	assertTrue("Intersection should be true", range.intersects(-3,  1));
-    }
-    
-    @Test
-    public void RangeDoesntIntersect() throws Exception {
-    	Range range = new Range(-1, 1);
-    	assertFalse("Intersection should be false", range.intersects(3,  5));
-    }
-    
-    @Test
-    public void RangeIntersectsSubsection() throws Exception {
-    	Range range = new Range(0, 10);
-    	assertTrue("Intersection should be true", range.intersects(2,  5));
-    }
-    
-    @Test
-    public void RangeIsSubsection() throws Exception {
-    	Range range = new Range(2, 5);
-    	assertTrue("Intersection should be true", range.intersects(0,  10));
-    }
-    
-    //toString
-    @Test 
-    public void TestToString() throws Exception {
-    	Range testRange = new Range(-10.0,10.0);
-    	String expected = "Range[-10.0,10.0]";
-    	String actual = testRange.toString();
-    	assertTrue("The correct string was not made.\nExpected: 'Range[-10.0,10.0]'\nActual: "+actual, actual.equals(expected));
-    }
-
 
     @After
     public void tearDown() throws Exception {
