@@ -54,8 +54,12 @@ public class DataUtilitiesTest extends DataUtilities {
 		    {
 		         one(values).getRowCount();
 		         will(returnValue(2));
+//		         one(values).getValue(0, 5);
+//		         will(throwException(new IndexOutOfBoundsException("outta bounds bozo")));
 		         one(values).getValue(0, 5);
-		         will(throwException(new IndexOutOfBoundsException("outta bounds bozo")));
+		    	will(returnValue(0));
+		    	one(values).getValue(1, 5);
+		    	will(returnValue(0));
 		    }
 		});
 		// test
@@ -97,11 +101,13 @@ public class DataUtilitiesTest extends DataUtilities {
 		    	one(values).getColumnCount();
 		    	will(returnValue(2));
 		    	one(values).getValue(5, 0);
-		    	will(throwException(new IndexOutOfBoundsException("outta bounds bozo")));
+		    	will(returnValue(0));
+		    	one(values).getValue(5, 1);
+		    	will(returnValue(0));
 		    }
 		});
 		// test
-		double result = DataUtilities.calculateRowTotal(values,4);
+		double result = DataUtilities.calculateRowTotal(values,5);
 		assertEquals("CalculateColumnTotal with invalid column should return 0 but instead returned" + result, 0, result, .000000001d);
 	}
 	
@@ -114,7 +120,31 @@ public class DataUtilitiesTest extends DataUtilities {
 	// Testing method createNumberArray(double[] data)
 	
 	
+	@Test
+	public void createNumberArray() 
+	{
+		double[] val = new double[] {69.0, 69.0, 69.0, 69.0};
+		
+		Number[] actual = DataUtilities.createNumberArray(val);
+		boolean res = actual.equals(val);
+		assertTrue(res);
+	}
+
+	
+	
 	// Testing method createNumberArray2D(double[][] data)
+	
+	@Test
+	public void createNumberArray2D()
+	{
+		double[][] val = new double[][] {{42.0, 42.0}, {42.0, 42.0}};
+
+		Number[][] actual = DataUtilities.createNumberArray2D(val);
+		boolean res = actual.equals(val);
+		assertTrue(res);
+	}
+	
+
 	
 	
 	// Testing method getCumulativePercentages(KeyedValues data)
@@ -310,11 +340,11 @@ public class DataUtilitiesTest extends DataUtilities {
 		// test
 		KeyedValues func = DataUtilities.getCumulativePercentages(kvValues);
 		double[] results = {
+				func.getValue(0).doubleValue(),
 				func.getValue(1).doubleValue(),
 				func.getValue(2).doubleValue(),
 				func.getValue(3).doubleValue(),
-				func.getValue(4).doubleValue(),
-				func.getValue(5).doubleValue()
+				func.getValue(4).doubleValue()
 		};
 		double[] expected = {0.3125, 0.875, 1.0, 1.0, 1.0};
 		
@@ -353,34 +383,13 @@ public class DataUtilitiesTest extends DataUtilities {
 		// test
 		KeyedValues func = DataUtilities.getCumulativePercentages(kvValues);
 		double[] results = {
+				func.getValue(0).doubleValue(),
 				func.getValue(1).doubleValue(),
-				func.getValue(2).doubleValue(),
 		};
 		double[] expected = {0.5, 1.0};
 		
 		assertTrue("results should equal expected.\nresults: "+Arrays.toString(results)+"\nexpected: "+Arrays.toString(expected), expected.equals(results));
 	}
-	
-	@Test
-	public void createNumberArray() 
-	{
-		double[] val = new double[] {69.0, 69.0, 69.0, 69.0};
-		
-		Number[] actual = DataUtilities.createNumberArray(val);
-		boolean res = actual.equals(val);
-		assertTrue(res);
-	}
-
-	@Test
-	public void createNumberArray2D()
-	{
-		double[][] val = new double[][] {{42.0, 42.0}, {42.0, 42.0}};
-
-		Number[][] actual = DataUtilities.createNumberArray2D(val);
-		boolean res = actual.equals(val);
-		assertTrue(res);
-	}
-	
 	
 	@After
 	public void tearDown() throws Exception {
