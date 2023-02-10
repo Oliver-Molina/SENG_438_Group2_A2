@@ -364,9 +364,9 @@ public class DataUtilitiesTest extends DataUtilities {
 	@Test
 	public void createNumberArray() 
 	{
-		double[] val = new double [] {69.0, 69.0, 69.0, 69.0};
+		double[] val = new double[] {69.0, 69.0, 69.0, 69.0};
 		
-		Number [] actual = DataUtilities.createNumberArray(val);
+		Number[] actual = DataUtilities.createNumberArray(val);
 		boolean res = actual.equals(val);
 		assertTrue(res);
 	}
@@ -374,9 +374,9 @@ public class DataUtilitiesTest extends DataUtilities {
 	@Test
 	public void createNumberArray2D()
 	{
-		double[][] val = new double [][] {{42.0, 42.0}, {42.0, 42.0}};
+		double[][] val = new double[][] {{42.0, 42.0}, {42.0, 42.0}};
 
-		Number [][] actual = DataUtilities.createNumberArray2D(val);
+		Number[][] actual = DataUtilities.createNumberArray2D(val);
 		boolean res = actual.equals(val);
 		assertTrue(res);
 	}
