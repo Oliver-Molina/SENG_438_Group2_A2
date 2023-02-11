@@ -88,7 +88,7 @@ public class DataUtilitiesTest extends DataUtilities {
 		assertEquals("CalculateColumnTotal with negative column should return 0 but instead returned" + result, 0, result, .000000001d);
 	}
 	
-	@Test (expected = NullPointerException.class)
+	@Test (expected = InvalidParameterException.class)
 	public void calculateColumnTotalForNullTable() throws Exception{
 		DataUtilities.calculateColumnTotal(null,0);
 	}
@@ -150,7 +150,7 @@ public class DataUtilitiesTest extends DataUtilities {
 		assertEquals("CalculateColumnTotal with negative row should return 0 but instead returned " + result, 0, result, .000000001d);
 	}
 	
-	@Test (expected = NullPointerException.class)
+	@Test (expected = InvalidParameterException.class)
 	public void calculateRowTotalForNullTable() throws Exception{
 		DataUtilities.calculateRowTotal(null,0);
 	}
@@ -237,10 +237,6 @@ public class DataUtilitiesTest extends DataUtilities {
 		Mockery mocking  = new Mockery();
 		KeyedValues kvValues = mocking.mock(KeyedValues.class);
 		
-		//our list of 3 keys
-		List<Integer> keys = new ArrayList<Integer>();
-		for(int i = 0; i < 3; i++) keys.add(i);
-		
 		//set up mocking
 		mocking.checking(new Expectations() {
 		    {
@@ -281,10 +277,6 @@ public class DataUtilitiesTest extends DataUtilities {
 	public void StringKeys_GetCumulativePercentages() {
 		Mockery mocking  = new Mockery();
 		KeyedValues kvValues = mocking.mock(KeyedValues.class);
-		
-		//our list of 3 keys
-		List<Integer> keys = new ArrayList<Integer>();
-		for(int i = 0; i < 3; i++) keys.add(i);
 		
 		//set up mocking
 		mocking.checking(new Expectations() {
@@ -335,10 +327,6 @@ public class DataUtilitiesTest extends DataUtilities {
 		Mockery mocking  = new Mockery();
 		KeyedValues kvValues = mocking.mock(KeyedValues.class);
 		
-		//our list of 3 keys
-		List<Integer> keys = new ArrayList<Integer>();
-		for(int i = 0; i < 3; i++) keys.add(i);
-		
 		//set up mocking
 		mocking.checking(new Expectations() {
 		    {
@@ -380,10 +368,6 @@ public class DataUtilitiesTest extends DataUtilities {
 	public void SizeFive_GetCumulativePercentages() {
 		Mockery mocking  = new Mockery();
 		KeyedValues kvValues = mocking.mock(KeyedValues.class);
-		
-		//our list of 3 keys
-		List<Integer> keys = new ArrayList<Integer>();
-		for(int i = 0; i < 3; i++) keys.add(i);
 		
 		//set up mocking
 		mocking.checking(new Expectations() {
@@ -471,6 +455,11 @@ public class DataUtilitiesTest extends DataUtilities {
 		double[] expected = {0.5, 1.0};
 		
 		assertTrue("results should equal expected.\nresults: "+Arrays.toString(results)+"\nexpected: "+Arrays.toString(expected), expected.equals(results));
+	}
+	
+	@Test (expected = InvalidParameterException.class)
+	public void NullThrowsException_GetCumulativePercentages() {
+		KeyedValues func = DataUtilities.getCumulativePercentages(null);
 	}
 	
 	@After
