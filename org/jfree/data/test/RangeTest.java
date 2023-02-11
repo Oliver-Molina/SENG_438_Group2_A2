@@ -94,12 +94,12 @@ public class RangeTest {
     // Testing method contains(double value)
     @Test
     public void ContainsReturnsTrue() throws Exception {
-    	assertTrue("Contains should return true for argument -5 on range2",range2.contains(-5));
+    	assertTrue("Contains should return true for argument 2 on range3",range3.contains(2));
     }
     
     @Test
     public void ContainsReturnsFalse() throws Exception {
-    	assertFalse("Contains should return false for argument -5 on range1",range1.contains(-5));
+    	assertFalse("Contains should return false for argument -5 on range3",range3.contains(-5));
     }
     
     @Test 
