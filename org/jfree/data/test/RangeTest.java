@@ -34,6 +34,16 @@ public class RangeTest {
 	
 	// Testing method combine(Range range1, Range range2)
 	@Test
+    public void CombineSubsetRanges() throws Exception{
+		Range r1 = new Range(0, 5);
+		Range r2 = new Range(1, 2);
+		Range result = Range.combine(r1, r2);
+		Range expected = new Range(0, 5);
+    	assertEquals("The combined range should be 0, 5", result, expected);
+    }
+	
+	// Testing method combine(Range range1, Range range2)
+	@Test
     public void CombineSeparatedRanges() throws Exception{
 		Range r1 = new Range(0, 1);
 		Range r2 = new Range(3, 4);
