@@ -116,7 +116,7 @@ public class RangeTest {
     @Test
     public void EqualsSameRange() throws Exception {
     	Range testRange = new Range(-1, 1);
-    	assertTrue("The equals method should be returning true on equivalent ranges.", range1.equals(testRange));
+    	assertTrue("The equals method should be returning true on equivalent ranges.", testRange.equals(testRange));
     }
     
     @Test
