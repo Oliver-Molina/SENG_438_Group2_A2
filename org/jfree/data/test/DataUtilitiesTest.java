@@ -11,6 +11,7 @@ import org.jfree.data.KeyedValues;
 import org.jfree.data.Values2D;
 import org.jmock.*;
 import org.junit.*;
+import java.security.InvalidParameterException;
 
 public class DataUtilitiesTest extends DataUtilities {
 	Mockery mockingContext;
@@ -110,7 +111,7 @@ public class DataUtilitiesTest extends DataUtilities {
 		});
 		// test
 		double result = DataUtilities.calculateRowTotal(values,0);
-		assertEquals("CalculateColumnTotal should return 8.5 but instead returned" + result, 8.5, result, .000000001d);
+		assertEquals("CalculateColumnTotal should return 8.5 but instead returned " + result, 8.5, result, .000000001d);
 	}
 	
 	@Test // (expected = NullPointerException.class)
@@ -128,7 +129,7 @@ public class DataUtilitiesTest extends DataUtilities {
 		});
 		// test
 		double result = DataUtilities.calculateRowTotal(values,5);
-		assertEquals("CalculateColumnTotal with invalid row should return 0 but instead returned" + result, 0, result, .000000001d);
+		assertEquals("CalculateColumnTotal with invalid row should return 0 but instead returned " + result, 0, result, .000000001d);
 	}
 	
 	@Test // (expected = NullPointerException.class)
@@ -146,7 +147,7 @@ public class DataUtilitiesTest extends DataUtilities {
 		});
 		// test
 		double result = DataUtilities.calculateRowTotal(values,-1);
-		assertEquals("CalculateColumnTotal with negative row should return 0 but instead returned" + result, 0, result, .000000001d);
+		assertEquals("CalculateColumnTotal with negative row should return 0 but instead returned " + result, 0, result, .000000001d);
 	}
 	
 	@Test (expected = NullPointerException.class)
@@ -156,16 +157,30 @@ public class DataUtilitiesTest extends DataUtilities {
 	
 	
 	// Testing method createNumberArray(double[] data)
-	
-	
+	// createNumberArray() function makes the last value null. good thing we tested!
 	@Test
 	public void createNumberArray() 
 	{
-		double[] val = new double[] {69.0, 69.0, 69.0, 69.0};
-		
+		double[] val = new double[] {60.0, -40.0, 20.0, -10.0};
 		Number[] actual = DataUtilities.createNumberArray(val);
-		boolean res = actual.equals(val);
-		assertTrue(res);
+		//System.out.println(Arrays.toString(actual));
+		for(int i = 0; i < 4; i++)
+			assertTrue("Values of array are "+Arrays.toString(actual)+", expected [60.0, 40.0, 20.0, -10.0]", actual[i].doubleValue() == val[i]);
+	}
+	
+	@Test (expected = InvalidParameterException.class)
+	public void nullNumberArrayThrowsException() 
+	{
+		Number[] actual = DataUtilities.createNumberArray(null);
+	}
+	
+	@Test
+	public void createEmptyNumberArray() 
+	{
+		double[] val = new double[] {};
+		Number[] actual = DataUtilities.createNumberArray(val);
+		
+		assertTrue("Values of array are "+Arrays.toString(actual)+", expected []", actual.length == 0);
 	}
 
 	
@@ -176,36 +191,41 @@ public class DataUtilitiesTest extends DataUtilities {
 	public void createNumberArray2D()
 	{
 		double[][] val = new double[][] {{42.0, 42.0}, {42.0, 42.0}};
-
 		Number[][] actual = DataUtilities.createNumberArray2D(val);
-		boolean res = actual.equals(val);
-		assertTrue(res);
-	}
+		
+		//for(int i = 0; i < val.length; i++)
+		//	System.out.println(Arrays.toString(actual[i]));
 	
-		public void createNullNumberArray2D() 
-	{
-		try
-		{
-			Number [][] actual = DataUtilities.createNumberArray2D(null);
-			fail("this test fails: NULL not allowed as parameter");
-		} catch (Exception e)
-		{
-			System.out.println("Exception creating 2D null number array");
-		}
-	}	
-	
-	public void createNullNumberArray() 
-	{
-		try
-		{
-			Number [] actual = DataUtilities.createNumberArray(null);
-			fail("this test fails: NULL not allowed as parameter");
-		} catch (Exception e)
-		{
-			System.out.println("Exception creating null number array");
+		for(int i = 0; i < val.length; i++) {
+			for(int j = 0; j < val[i].length; j++) {
+				assertTrue("Values of array are "+Arrays.toString(actual)+", expected [[42.0, 42.0], [42.0, 42.0]]", actual[i][j].doubleValue() == val[i][j]);
+			}
 		}
 	}
 	
+	@Test (expected = InvalidParameterException.class)
+	public void null2DNumberArrayThrowsException() 
+	{
+		Number[][] actual = DataUtilities.createNumberArray2D(null);
+	}
+	
+	@Test
+	public void createEmptySecondDimensionNumberArray2D() 
+	{
+		double[][] val = new double[1][];
+		Number[][] actual = DataUtilities.createNumberArray2D(val);
+		
+		assertTrue("Values of array are "+Arrays.toString(actual)+", expected []", val.length == 1 && val[0].length == 0);
+	}
+	
+	@Test
+	public void createEmptyNumberArray2D() 
+	{
+		double[][] val = new double[1][1];
+		Number[][] actual = DataUtilities.createNumberArray2D(val);
+		
+		assertTrue("Values of array are "+Arrays.toString(actual)+", expected [[]]", val.length == 1 && val[0].length == 1);
+	}
 
 	
 	
