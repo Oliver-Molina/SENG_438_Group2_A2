@@ -49,7 +49,7 @@ public class DataUtilitiesTest extends DataUtilities {
 	}
 	
 	@Test //(expected = NullPointerException.class) // it says that invalid input returns 0
-	public void calculateColumnTotalForInavlidColumn() {
+	public void calculateColumnTotalForInvalidColumn() {
 		// setup
 		mockingContext.checking(new Expectations() {
 		    {

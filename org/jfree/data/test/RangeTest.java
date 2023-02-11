@@ -1,6 +1,7 @@
 package org.jfree.data.test;
 
 import static org.junit.Assert.*;
+import java.security.InvalidParameterException;
 
 import org.jfree.data.Range;
 import org.junit.*;
@@ -133,7 +134,7 @@ public class RangeTest {
     
     // Testing method expand(Range range, double lowerMargin, double upperMargin)
     @Test
-    public void ExpandsPercetanges() throws Exception {
+    public void ExpandsPercentanges() throws Exception {
     	Range testRange = new Range(2, 6);
     	Range newRange = Range.expand(testRange, 0.25, 0.5);
     	Range expectedRange = new Range(1,8);
@@ -156,7 +157,7 @@ public class RangeTest {
     	assertTrue("The range did not properly expand the upper bound.", newRange.equals(expectedRange));
     }
     
-    @Test (expected = IllegalArgumentException.class)
+    @Test (expected = InvalidParameterException.class)
     public void ExpandThrowsException() {
     	Range.expand(null, 2, 6);
     }
