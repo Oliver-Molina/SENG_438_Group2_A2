@@ -182,6 +182,30 @@ public class DataUtilitiesTest extends DataUtilities {
 		assertTrue(res);
 	}
 	
+		public void createNullNumberArray2D() 
+	{
+		try
+		{
+			Number [][] actual = DataUtilities.createNumberArray2D(null);
+			fail("this test fails: NULL not allowed as parameter");
+		} catch (Exception e)
+		{
+			System.out.println("Exception creating 2D null number array");
+		}
+	}	
+	
+	public void createNullNumberArray() 
+	{
+		try
+		{
+			Number [] actual = DataUtilities.createNumberArray(null);
+			fail("this test fails: NULL not allowed as parameter");
+		} catch (Exception e)
+		{
+			System.out.println("Exception creating null number array");
+		}
+	}
+	
 
 	
 	
