@@ -22,6 +22,34 @@ public class RangeTest {
 
 	 
 	// Testing method combine(Range range1, Range range2)
+	@Test
+    public void CombineOverlappingRanges() throws Exception{
+		Range r1 = new Range(0, 5);
+		Range r2 = new Range(3, 10);
+		Range result = Range.combine(r1, r2);
+		Range expected = new Range(0, 10);
+    	assertEquals("The combined range should be 0, 10", result, expected);
+    }
+	
+	// Testing method combine(Range range1, Range range2)
+	@Test
+    public void CombineSeparatedRanges() throws Exception{
+		Range r1 = new Range(0, 1);
+		Range r2 = new Range(3, 4);
+		Range result = Range.combine(r1, r2);
+		Range expected = new Range(0, 4);
+    	assertEquals("The combined range should be 0, 4", result, expected);
+    }
+	// Testing method combine(Range range1, Range range2)
+	@Test
+    public void CombineAdjacentRanges() throws Exception{
+		Range r1 = new Range(0, 1);
+		Range r2 = new Range(1, 2);
+		Range result = Range.combine(r1, r2);
+		Range expected = new Range(0, 2);
+    	assertEquals("The combined range should be 0, 2", result, expected);
+    }
+	
     @Test
     public void CombinedRangeShouldBeRange1() throws Exception{
     	assertEquals("The combined range should be -1,1",range1,Range.combine(range1,null));
@@ -41,19 +69,26 @@ public class RangeTest {
     @Test
     public void ConstrainReturnValueShouldBeLowerBound() throws Exception {
     	double constrainValue = range1.constrain(-5);
-    	assertEquals("The expected value was -1.0 but the returned value was " + constrainValue,-1.0,constrainValue, .000000001d);
+    	assertEquals("The expected value was -1.0 but the returned value was " + constrainValue, -1.0, constrainValue, .000000001d);
     }
     
     @Test
     public void ConstrainReturnValueShouldBeUpperBound() throws Exception {
     	double constrainValue = range1.constrain(10);
-    	assertEquals("The expected value was 1.0 but the returned value was " + constrainValue,1.0,constrainValue, .000000001d);
+    	assertEquals("The expected value was 1.0 but the returned value was " + constrainValue, 1.0, constrainValue, .000000001d);
     }
     
     @Test
     public void ConstrainReturnValueShouldBe5() throws Exception {
     	double constrainValue = range3.constrain(5);
-    	assertEquals("The expected value was 5.0 but the returned value was " + constrainValue,5.0,constrainValue, .000000001d);
+    	assertEquals("The expected value was 5.0 but the returned value was " + constrainValue, 5.0, constrainValue, .000000001d);
+    }
+    
+    @Test
+    public void ConstrainReturnValueShouldBe0() throws Exception {
+    	Range testRange = new Range(0, 0);
+    	double constrainValue = testRange.constrain(-5);
+    	assertEquals("The expected value was 0.0 but the returned value was " + constrainValue, 0.0, constrainValue, .000000001d);
     }
     
     // Testing method contains(double value)
@@ -62,9 +97,19 @@ public class RangeTest {
     	assertTrue("Contains should return true for argument -5 on range2",range2.contains(-5));
     }
     
-    @Test 
+    @Test
     public void ContainsReturnsFalse() throws Exception {
-    	assertFalse("Contains should return false for argument -5 on range3", range3.contains(-5));
+    	assertFalse("Contains should return false for argument -5 on range1",range1.contains(-5));
+    }
+    
+    @Test 
+    public void ContainsLowerBound() throws Exception {
+    	assertTrue("Contains should return false for argument -5 on range3", range3.contains(1));
+    }
+    
+    @Test
+    public void ContainsUpperBound() throws Exception {
+    	assertTrue("Contains should return false for argument -5 on range3", range3.contains(10));
     }
     
     // Testing method equals(Object obj)
@@ -81,7 +126,7 @@ public class RangeTest {
     }
     
     @Test
-    public void EqualsSimilarRange() throws Exception {
+    public void EqualsSimilarRangeObject() throws Exception {
     	Range range1Similar = new Range(-1, 1);
     	assertTrue("The equals method should be returning false on equivalent ranges.", range1.equals(range1Similar));
     }
@@ -92,7 +137,23 @@ public class RangeTest {
     	Range testRange = new Range(2, 6);
     	Range newRange = Range.expand(testRange, 0.25, 0.5);
     	Range expectedRange = new Range(1,8);
+    	assertTrue("The range did not properly expand bounds.", newRange.equals(expectedRange));
+    }
+    
+    @Test
+    public void ExpandsPercentangesBottom() throws Exception {
+    	Range testRange = new Range(2, 6);
+    	Range newRange = Range.expand(testRange, 0.25, 0.0);
+    	Range expectedRange = new Range(1,6);
     	assertTrue("The range did not properly expand the lower bound.", newRange.equals(expectedRange));
+    }
+    
+    @Test
+    public void ExpandsPercentangesTop() throws Exception {
+    	Range testRange = new Range(2, 6);
+    	Range newRange = Range.expand(testRange, 0.0, 0.5);
+    	Range expectedRange = new Range(2, 8);
+    	assertTrue("The range did not properly expand the upper bound.", newRange.equals(expectedRange));
     }
     
     @Test (expected = IllegalArgumentException.class)
