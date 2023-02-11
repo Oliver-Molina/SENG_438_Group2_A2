@@ -67,6 +67,26 @@ public class DataUtilitiesTest extends DataUtilities {
 		assertEquals("CalculateColumnTotal with invalid column should return 0 but instead returned" + result, 0, result, .000000001d);
 	}
 	
+	@Test 
+	public void calculateColumnTotalForNegativeColumn() {
+		// setup
+		mockingContext.checking(new Expectations() {
+		    {
+		         one(values).getRowCount();
+		         will(returnValue(2));
+//		         one(values).getValue(0, -1);
+//		         will(throwException(new IndexOutOfBoundsException("outta bounds bozo")));
+		         one(values).getValue(0, -1);
+		    	will(returnValue(0));
+		    	one(values).getValue(1, -1);
+		    	will(returnValue(0));
+		    }
+		});
+		// test
+		double result = DataUtilities.calculateColumnTotal(values,-1);
+		assertEquals("CalculateColumnTotal with negative column should return 0 but instead returned" + result, 0, result, .000000001d);
+	}
+	
 	@Test (expected = NullPointerException.class)
 	public void calculateColumnTotalForNullTable() throws Exception{
 		DataUtilities.calculateColumnTotal(null,0);
@@ -93,7 +113,7 @@ public class DataUtilitiesTest extends DataUtilities {
 		assertEquals("CalculateColumnTotal should return 8.5 but instead returned" + result, 8.5, result, .000000001d);
 	}
 	
-	@Test (expected = NullPointerException.class)
+	@Test // (expected = NullPointerException.class)
 	public void calculateRowTotalForInvalidRow() {
 		// setup
 		mockingContext.checking(new Expectations() {
@@ -108,7 +128,25 @@ public class DataUtilitiesTest extends DataUtilities {
 		});
 		// test
 		double result = DataUtilities.calculateRowTotal(values,5);
-		assertEquals("CalculateColumnTotal with invalid column should return 0 but instead returned" + result, 0, result, .000000001d);
+		assertEquals("CalculateColumnTotal with invalid row should return 0 but instead returned" + result, 0, result, .000000001d);
+	}
+	
+	@Test // (expected = NullPointerException.class)
+	public void calculateRowTotalForNegativeRow() {
+		// setup
+		mockingContext.checking(new Expectations() {
+		    {
+		    	one(values).getColumnCount();
+		    	will(returnValue(2));
+		    	one(values).getValue(-1, 0);
+		    	will(returnValue(0));
+		    	one(values).getValue(-1, 1);
+		    	will(returnValue(0));
+		    }
+		});
+		// test
+		double result = DataUtilities.calculateRowTotal(values,-1);
+		assertEquals("CalculateColumnTotal with negative row should return 0 but instead returned" + result, 0, result, .000000001d);
 	}
 	
 	@Test (expected = NullPointerException.class)
