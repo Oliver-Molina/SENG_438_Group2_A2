@@ -418,7 +418,7 @@ public class DataUtilitiesTest extends DataUtilities {
 	}
 	
 	@Test
-	public void SimpleZeroKey_GetCumulativePercentages() {
+	public void SizeTwoZeroKey_GetCumulativePercentages() {
 		Mockery mocking  = new Mockery();
 		KeyedValues kvValues = mocking.mock(KeyedValues.class);
 		
